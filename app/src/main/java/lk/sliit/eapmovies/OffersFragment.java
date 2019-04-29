@@ -1,6 +1,7 @@
 package lk.sliit.eapmovies;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -9,13 +10,20 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**
@@ -37,6 +45,8 @@ public class OffersFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private View view;
 
     public OffersFragment() {
         // Required empty public constructor
@@ -67,30 +77,72 @@ public class OffersFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        System.out.println("Offers On Create");
 
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        String url = "";
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-
-        queue.add(stringRequest);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_offers, container, false);
+        view = inflater.inflate(R.layout.fragment_offers, container, false);
+
+        final RequestQueue queue = Volley.newRequestQueue(getContext());
+        final LinearLayout imageLayout = view.findViewById(R.id.image_layout);
+        String url = "http://192.168.1.100:8000/eap";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                System.out.println("Offers Request");
+                try {
+                    JSONArray eapList = new JSONArray(response);
+                    JSONObject list = eapList.getJSONObject(0);
+                    JSONArray offers = (JSONArray) list.get("offers");
+
+                    for(int i=0; i<offers.length(); i++) {
+                        String imageUrl = offers.getString(i);
+                        ImageRequest stringRequest1 = new ImageRequest(imageUrl, new Response.Listener<Bitmap>() {
+                            @Override
+                            public void onResponse(Bitmap response) {
+                                System.out.println("response from image");
+                                ImageView imageView = new ImageView(getContext());
+                                imageView.setLayoutParams(new ViewGroup.LayoutParams(
+                                        ViewGroup.LayoutParams.MATCH_PARENT,
+                                       1200
+                                ));
+                                imageView.setImageBitmap(response);
+                                imageView.setPadding(10, 10, 10, 10);
+                                imageLayout.addView(imageView);
+                            }
+                        }, 0, 0, Bitmap.Config.RGB_565, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                System.out.println("response from image");
+                            }
+                        });
+
+                        queue.add(stringRequest1);
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Offers Error");
+                System.out.println(error.getMessage());
+            }
+        });
+
+        queue.add(stringRequest);
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

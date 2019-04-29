@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-
     }
 
     /**
