@@ -1,17 +1,17 @@
-package lk.sliit.eapmovies;
+package lk.sliit.eapmovies.fragments;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,53 +19,44 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import lk.sliit.eapmovies.HttpSingleton;
+import lk.sliit.eapmovies.adapters.MyMovieRecyclerViewAdapter;
+import lk.sliit.eapmovies.R;
+
+import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OffersFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link OffersFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A fragment representing a list of Items.
+ * <p/>
+ * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
+ * interface.
  */
-public class OffersFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class OfferFragment extends Fragment {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
-    private View view;
-
-    public OffersFragment() {
-        // Required empty public constructor
-    }
+    // TODO: Customize parameter argument names
+    private static final String ARG_COLUMN_COUNT = "column-count";
+    // TODO: Customize parameters
+    private int mColumnCount = 1;
+    private OnListFragmentInteractionListener mListener;
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment OffersFragment.
+     * Mandatory empty constructor for the fragment manager to instantiate the
+     * fragment (e.g. upon screen orientation changes).
      */
-    // TODO: Rename and change types and number of parameters
-    public static OffersFragment newInstance(String param1, String param2) {
-        OffersFragment fragment = new OffersFragment();
+    public OfferFragment() {
+    }
+
+    // TODO: Customize parameter initialization
+    @SuppressWarnings("unused")
+    public static OfferFragment newInstance(int columnCount) {
+        OfferFragment fragment = new OfferFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,24 +64,23 @@ public class OffersFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
-        System.out.println("Offers On Create");
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_offers, container, false);
+        View view = inflater.inflate(R.layout.fragment_offer_list, container, false);
+        final ArrayList<Bitmap> offerList = new ArrayList<>();
 
-        final RequestQueue queue = Volley.newRequestQueue(getContext());
-        final LinearLayout imageLayout = view.findViewById(R.id.image_layout);
-        String url = "http://192.168.1.100:8000/eap";
+        final MyMovieRecyclerViewAdapter myMovieRecyclerViewAdapter = new MyMovieRecyclerViewAdapter(offerList, null);
+
+        final RequestQueue queue = HttpSingleton.getInstance(getContext()).getRequestQueue();
+        String baseUrl = getString(R.string.base_url);
+        String url = baseUrl + "/eap";
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -107,14 +97,9 @@ public class OffersFragment extends Fragment {
                             @Override
                             public void onResponse(Bitmap response) {
                                 System.out.println("response from image");
-                                ImageView imageView = new ImageView(getContext());
-                                imageView.setLayoutParams(new ViewGroup.LayoutParams(
-                                        ViewGroup.LayoutParams.MATCH_PARENT,
-                                       1200
-                                ));
-                                imageView.setImageBitmap(response);
-                                imageView.setPadding(10, 10, 10, 10);
-                                imageLayout.addView(imageView);
+                                offerList.add(response);
+                                myMovieRecyclerViewAdapter.notifyDataSetChanged();
+
                             }
                         }, 0, 0, Bitmap.Config.RGB_565, new Response.ErrorListener() {
                             @Override
@@ -142,24 +127,30 @@ public class OffersFragment extends Fragment {
 
         queue.add(stringRequest);
 
+
+        // Set the adapter
+        if (view instanceof RecyclerView) {
+            Context context = view.getContext();
+            RecyclerView recyclerView = (RecyclerView) view;
+            if (mColumnCount <= 1) {
+                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            } else {
+                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+            }
+            recyclerView.setAdapter(myMovieRecyclerViewAdapter);
+        }
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnListFragmentInteractionListener) {
+            mListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnListFragmentInteractionListener");
         }
     }
 
@@ -174,13 +165,13 @@ public class OffersFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onListFragmentInteraction();
     }
 }

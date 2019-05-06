@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="theatres_array">
+        <item>Choose a Theatre</item>
+        <item value="2">Savoy 2 - Wellawatte</item>
+        <item value="3">Savoy 3D Dolby ATMOS - Wellawatte</item>
+        <item value="7">Concord - Dehiwala</item>
+        <item value="8">Cinemax 3D - Jaela</item>
+        <item value="10">Willmax 3D - Anuradhapura</item>
+        <item value="11">Excel 3D - Colombo 10</item>
+        <item value="12">Queens 3D - Galle</item>
+        <item value="14">Jothi 3D - Rathnapura</item>
+        <item value="15">Sinexpo 3D - Kurunegala</item>
+        <item value="16">Samantha - Dematagoda</item>
+        <item value="19">Regal - Ambalangoda</item>
+        <item value="20">Tower - Moratuwa</item>
+        <item value="208">Savoy Premiere (Roxy Cinema) - Wellawatte</item>
+        <item value="238">Savoy Premier Rajagiriya - Rajagiriya</item>
+        <item value="242">Savoy Metro - Gampaha - Gampaha</item>
+    </string-array>
+</resources>

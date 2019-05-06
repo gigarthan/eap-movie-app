@@ -11,11 +11,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import lk.sliit.eapmovies.fragments.MovieFragment;
+import lk.sliit.eapmovies.fragments.NowShowingFragment;
+import lk.sliit.eapmovies.fragments.OfferFragment;
+import lk.sliit.eapmovies.fragments.RateFragment;
 
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener, OffersFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements MovieFragment.OnListFragmentInteractionListener, OfferFragment.OnListFragmentInteractionListener, RateFragment.OnFragmentInteractionListener, NowShowingFragment.OnListFragmentInteractionListener {
 
     private TextView mTextMessage;
     private FragmentManager fragmentManager = getSupportFragmentManager();
@@ -25,19 +29,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    loadFragment(new HomeFragment());
-                    return true;
-                case R.id.navigation_dashboard:
-                    return true;
-                case R.id.navigation_notifications:
-                    loadFragment(new OffersFragment());
-                    return true;
-            }
-            return false;
+            return setActiveFragment(item.getItemId());
         }
     };
 
@@ -50,7 +42,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        loadFragment(new HomeFragment());
+        int id = navigation.getSelectedItemId();
+        setActiveFragment(id);
     }
 
     @Override
@@ -59,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
     /**
      * Load the intended fragment into the frame layout in the main activity
+     *
      * @param fragment
      */
     public void loadFragment(Fragment fragment) {
@@ -66,5 +60,28 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+
+    public void onListFragmentInteraction() {
+
+    }
+
+    private boolean setActiveFragment(int id) {
+        switch (id) {
+            case R.id.navigation_home:
+                loadFragment(MovieFragment.newInstance(2));
+                return true;
+            case R.id.navigation_dashboard:
+                loadFragment(RateFragment.newInstance());
+                return true;
+            case R.id.navigation_notifications:
+                loadFragment(OfferFragment.newInstance(1));
+                return true;
+            case R.id.navigation_nowshowing:
+                loadFragment(NowShowingFragment.newInstance(2));
+                return true;
+        }
+        return false;
     }
 }
