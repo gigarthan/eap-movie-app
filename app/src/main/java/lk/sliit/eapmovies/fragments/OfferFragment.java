@@ -31,16 +31,14 @@ import lk.sliit.eapmovies.R;
 import java.util.ArrayList;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing list of current offers provided.
  * <p/>
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
 public class OfferFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
@@ -51,8 +49,6 @@ public class OfferFragment extends Fragment {
     public OfferFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static OfferFragment newInstance(int columnCount) {
         OfferFragment fragment = new OfferFragment();
         Bundle args = new Bundle();
@@ -85,7 +81,6 @@ public class OfferFragment extends Fragment {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                System.out.println("Offers Request");
                 try {
                     JSONArray eapList = new JSONArray(response);
                     JSONObject list = eapList.getJSONObject(0);
@@ -96,7 +91,6 @@ public class OfferFragment extends Fragment {
                         ImageRequest stringRequest1 = new ImageRequest(imageUrl, new Response.Listener<Bitmap>() {
                             @Override
                             public void onResponse(Bitmap response) {
-                                System.out.println("response from image");
                                 offerList.add(response);
                                 myMovieRecyclerViewAdapter.notifyDataSetChanged();
 
@@ -104,7 +98,6 @@ public class OfferFragment extends Fragment {
                         }, 0, 0, Bitmap.Config.RGB_565, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                System.out.println("response from image");
                             }
                         });
 
@@ -120,7 +113,6 @@ public class OfferFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("Offers Error");
                 System.out.println(error.getMessage());
             }
         });
@@ -171,7 +163,6 @@ public class OfferFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction();
     }
 }

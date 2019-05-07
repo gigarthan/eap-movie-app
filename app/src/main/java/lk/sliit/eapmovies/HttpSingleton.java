@@ -9,6 +9,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
+/**
+ *
+ * Singleton instance to manage network
+ * requests using `Volley`
+ *
+ */
 public class HttpSingleton {
     private static HttpSingleton ourInstance;
     private RequestQueue requestQueue;

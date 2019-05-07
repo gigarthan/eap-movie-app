@@ -36,7 +36,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Fragment to get movie rates of theatres
+ */
 public class RateFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
 
@@ -190,7 +192,7 @@ public class RateFragment extends Fragment implements AdapterView.OnItemSelected
 
         final RequestQueue queue = HttpSingleton.getInstance(getContext()).getRequestQueue();
         String baseUrl = getString(R.string.base_url);
-        String url = baseUrl +  "/movie-rate/show-time/" + id;
+        String url = baseUrl + "/movie-rate/show-time/" + id;
 
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

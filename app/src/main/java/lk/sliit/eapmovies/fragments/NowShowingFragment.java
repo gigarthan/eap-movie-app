@@ -31,16 +31,14 @@ import lk.sliit.eapmovies.R;
 import java.util.ArrayList;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing all currently showing movies.
  * <p/>
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
 public class NowShowingFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
@@ -51,8 +49,6 @@ public class NowShowingFragment extends Fragment {
     public NowShowingFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static NowShowingFragment newInstance(int columnCount) {
         NowShowingFragment fragment = new NowShowingFragment();
         Bundle args = new Bundle();
@@ -84,26 +80,23 @@ public class NowShowingFragment extends Fragment {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                System.out.println("Offers Request");
                 try {
                     JSONArray eapList = new JSONArray(response);
                     JSONObject list = eapList.getJSONObject(0);
                     JSONArray upcoming = (JSONArray) list.get("nowShowing");
 
-                    for(int i=0; i<upcoming.length(); i++) {
+                    for (int i = 0; i < upcoming.length(); i++) {
                         JSONObject movie = upcoming.getJSONObject(i);
                         String imageUrl = movie.getString("imageUrl");
                         ImageRequest stringRequest1 = new ImageRequest(imageUrl, new Response.Listener<Bitmap>() {
                             @Override
                             public void onResponse(Bitmap response) {
-                                System.out.println("response from image");
                                 images.add(response);
                                 myMovieRecyclerViewAdapter.notifyDataSetChanged();
                             }
                         }, 0, 0, Bitmap.Config.RGB_565, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                System.out.println("response from image");
                             }
                         });
 
@@ -119,7 +112,6 @@ public class NowShowingFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("Offers Error");
                 System.out.println(error.getMessage());
             }
         });
@@ -170,7 +162,6 @@ public class NowShowingFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction();
     }
 }

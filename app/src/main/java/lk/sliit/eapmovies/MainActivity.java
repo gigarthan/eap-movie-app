@@ -37,10 +37,12 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.OnL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().setBackgroundDrawableResource(R.drawable.blank);
 
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.setItemBackgroundResource(R.drawable.blank);
 
         int id = navigation.getSelectedItemId();
         setActiveFragment(id);
