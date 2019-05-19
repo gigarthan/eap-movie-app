@@ -19,6 +19,13 @@ import lk.sliit.eapmovies.fragments.RateFragment;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+/**
+ * Class : MainActivity
+ *
+ * Handles initiation of the APP and other Lifecycle methods
+ *
+ * Author: Gigarthan Vijayakumaran
+ */
 public class MainActivity extends AppCompatActivity implements MovieFragment.OnListFragmentInteractionListener, OfferFragment.OnListFragmentInteractionListener, RateFragment.OnFragmentInteractionListener, NowShowingFragment.OnListFragmentInteractionListener {
 
     private TextView mTextMessage;
@@ -69,6 +76,11 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.OnL
 
     }
 
+    /**
+     * Set Active Fragments depends on the active ID
+     * @param id
+     * @return
+     */
     private boolean setActiveFragment(int id) {
         switch (id) {
             case R.id.navigation_home:

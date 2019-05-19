@@ -35,6 +35,8 @@ import java.util.ArrayList;
  * <p/>
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
+ *
+ * Author: Gigarthan Vijayakumaran
  */
 public class OfferFragment extends Fragment {
 

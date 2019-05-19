@@ -14,6 +14,8 @@ import com.android.volley.toolbox.Volley;
  * Singleton instance to manage network
  * requests using `Volley`
  *
+ * Author : Gigarthan Vijayakumaran
+ *
  */
 public class HttpSingleton {
     private static HttpSingleton ourInstance;
@@ -49,17 +51,18 @@ public class HttpSingleton {
                 });
     }
 
+//  Return Request Queue Instance
     public RequestQueue getRequestQueue() {
         if(requestQueue == null) {
             requestQueue = Volley.newRequestQueue(ctx.getApplicationContext());
         }
         return requestQueue;
     }
-
+//  Add Requests to the Queue
     public <T> void addToRequestQueue(Request<T> req) {
         getRequestQueue().add(req);
     }
-
+//  Return ImageLoader Instance
     public ImageLoader getImageLoader() {
         return imageLoader;
     }

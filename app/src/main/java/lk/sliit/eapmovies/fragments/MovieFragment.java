@@ -34,6 +34,8 @@ import java.util.ArrayList;
  * A fragment that contains the upcoming movies list.
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
+ *
+ * Author: Ranjitha L
  */
 public class MovieFragment extends Fragment {
 

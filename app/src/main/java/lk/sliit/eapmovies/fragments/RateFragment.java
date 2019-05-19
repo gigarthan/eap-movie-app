@@ -38,6 +38,8 @@ import java.util.Map;
 
 /**
  * Fragment to get movie rates of theatres
+ *
+ * Author: Gigarthan Vijayakumaran
  */
 public class RateFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
@@ -169,6 +171,10 @@ public class RateFragment extends Fragment implements AdapterView.OnItemSelected
         // Another interface callback
     }
 
+    /**
+     * Get Movie Show Times for a Theatre
+     * @param value
+     */
     public void getShowTimes(String value) {
         Map<String, String> theatreIds = new ArrayMap<>();
         theatreIds.put("Savoy 2 - Wellawatte", "2");
@@ -224,6 +230,10 @@ public class RateFragment extends Fragment implements AdapterView.OnItemSelected
         queue.add(request);
     }
 
+    /**
+     * Get Movie Rates of a Theatre for a specific date
+     * @param value
+     */
     public void getMovieRate(String value) {
         String sid = showTimeIdMap.get(value);
         String date = (String) dateText.getText();
